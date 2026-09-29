@@ -69,7 +69,9 @@ export class CloudMediaService {
 
     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
     const ext = path.extname(originalName) || '.png';
-    const cleanFilename = `${path.basename(originalName, ext)}-${uniqueSuffix}${ext}`;
+    const rawBase = path.basename(originalName, ext);
+    const sanitizedBase = rawBase.replace(/[^a-zA-Z0-9_-]/g, '_') || 'image';
+    const cleanFilename = `${sanitizedBase}-${uniqueSuffix}${ext}`;
     const filePath = path.join(uploadsDir, cleanFilename);
 
     fs.writeFileSync(filePath, buffer);

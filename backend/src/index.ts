@@ -11,7 +11,12 @@ import adminRoutes from './routes/admin';
 
 const app = express();
 
-app.use(helmet());
+// Disable Cross-Origin-Resource-Policy restriction so frontend on port 40000 can display backend uploaded images
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+  })
+);
 app.use(
   cors({
     origin: config.corsOrigin,
@@ -22,8 +27,12 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve local uploads
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+// Serve local uploads folder (ensure directory exists and matches media.service.ts)
+const uploadsDirectory = path.resolve(__dirname, '../../uploads');
+if (!require('fs').existsSync(uploadsDirectory)) {
+  require('fs').mkdirSync(uploadsDirectory, { recursive: true });
+}
+app.use('/uploads', express.static(uploadsDirectory));
 
 // Mount Auth, Public, & Admin API
 app.use('/api/auth', authRoutes);

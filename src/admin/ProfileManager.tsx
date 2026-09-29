@@ -52,6 +52,31 @@ export default function ProfileManager({ profile, onRefresh }: ProfileManagerPro
     }
   }, [profile]);
 
+  const handleAvatarUploaded = async (uploadedUrl: string) => {
+    setAvatarUrl(uploadedUrl);
+    setLoading(true);
+    try {
+      await api.updateProfile({
+        fullName: fullName || profile?.fullName || 'Shaikh Abbas',
+        title: title || profile?.title || 'Senior Software Engineer',
+        headline: headline || profile?.headline || '',
+        email: email || profile?.email || 'abbas4developer@gmail.com',
+        phone: phone || profile?.phone || '',
+        location: location || profile?.location || '',
+        avatarUrl: uploadedUrl,
+        shortBio: shortBio || profile?.shortBio || '',
+        metaDescription: metaDescription || profile?.metaDescription || '',
+        isPublished: true,
+      });
+      setFeedback({ message: 'Avatar image replaced and saved to database successfully!', severity: 'success' });
+      onRefresh();
+    } catch (err: any) {
+      setFeedback({ message: 'Uploaded, but failed to save profile: ' + (err.message || ''), severity: 'error' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -137,10 +162,37 @@ export default function ProfileManager({ profile, onRefresh }: ProfileManagerPro
               <Grid item xs={12}>
                 <MediaUploader
                   currentUrl={avatarUrl}
-                  onUploaded={(uploadedUrl) => setAvatarUrl(uploadedUrl)}
-                  label="Profile Avatar Photo"
+                  onUploaded={handleAvatarUploaded}
+                  label="Profile Avatar Photo (Upload to save immediately)"
                   previewHeight={140}
                 />
+              </Grid>
+              <Grid item xs={12}>
+                <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="Avatar Image URL (or paste external URL)"
+                    value={avatarUrl}
+                    onChange={(e) => setAvatarUrl(e.target.value)}
+                    helperText="Upload an image above or enter an image URL and click Save"
+                  />
+                  <Button
+                    variant="outlined"
+                    disabled={loading}
+                    onClick={() => handleAvatarUploaded(avatarUrl)}
+                    sx={{
+                      height: 40,
+                      color: '#a78bfa',
+                      borderColor: '#7c3aed',
+                      textTransform: 'none',
+                      whiteSpace: 'nowrap',
+                      '&:hover': { borderColor: '#a78bfa', bgcolor: 'rgba(124, 58, 237, 0.1)' },
+                    }}
+                  >
+                    Save Avatar
+                  </Button>
+                </Box>
               </Grid>
             </Grid>
           </CardContent>

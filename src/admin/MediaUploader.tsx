@@ -26,7 +26,13 @@ export default function MediaUploader({
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | undefined>(currentUrl);
+  const [imgLoadError, setImgLoadError] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    setPreview(currentUrl);
+    setImgLoadError(false);
+  }, [currentUrl]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -102,12 +108,42 @@ export default function MediaUploader({
             border: '1px solid #1e293b',
           }}
         >
-          <img
-            src={preview}
-            alt="Preview"
-            style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }}
-          />
+          {imgLoadError ? (
+            <Box sx={{ textAlign: 'center', p: 1 }}>
+              <Typography variant="caption" sx={{ color: '#ef4444', display: 'block', fontWeight: 600 }}>
+                Image preview unavailable
+              </Typography>
+              <Typography variant="caption" sx={{ color: '#94a3b8', fontSize: '0.7rem', wordBreak: 'break-all' }}>
+                {preview}
+              </Typography>
+            </Box>
+          ) : (
+            <img
+              src={preview}
+              alt="Preview"
+              onError={() => setImgLoadError(true)}
+              style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }}
+            />
+          )}
         </Box>
+      )}
+
+      {preview && (
+        <Typography
+          variant="caption"
+          sx={{
+            color: '#64748b',
+            fontSize: '0.72rem',
+            wordBreak: 'break-all',
+            fontFamily: 'monospace',
+            bgcolor: '#020617',
+            p: 0.75,
+            borderRadius: 1,
+            border: '1px solid #1e293b',
+          }}
+        >
+          {preview}
+        </Typography>
       )}
 
       {error && (

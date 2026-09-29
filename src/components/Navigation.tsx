@@ -17,17 +17,19 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 
 const drawerWidth = 240;
-const navItems = [['Expertise', 'expertise'], ['History', 'history'], ['Projects', 'projects'], ['Contact', 'contact']];
+const defaultNavItems = [['Expertise', 'expertise'], ['History', 'history'], ['Projects', 'projects'], ['Contact', 'contact']];
 
 interface NavigationProps {
   parentToChild: {
     mode: string;
   };
   modeChange: () => void;
+  items?: Array<[string, string]>;
 }
 
-function Navigation({parentToChild, modeChange}: NavigationProps) {
+function Navigation({parentToChild, modeChange, items}: NavigationProps) {
 
+  const navItems = items && items.length > 0 ? items : defaultNavItems;
   const {mode} = parentToChild;
 
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
