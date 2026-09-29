@@ -402,6 +402,15 @@ export class PortfolioController {
     }
   }
 
+  static async deleteResume(req: Request, res: Response) {
+    try {
+      await PortfolioService.deleteResume(req.params.id);
+      res.json({ success: true, message: 'Resume deleted' });
+    } catch (error: any) {
+      PortfolioController.handleError(res, error, 'Failed to delete resume');
+    }
+  }
+
   // ===================== CONTACT =====================
   static async submitContact(req: Request, res: Response) {
     try {
