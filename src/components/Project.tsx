@@ -54,7 +54,9 @@ function Project({ projects }: ProjectProps) {
               return (
                 <div className="project" key={p.id || p.title}>
                     <a href={linkUrl} target="_blank" rel="noreferrer">
-                        <img src={imgSrc} className="zoom" alt={p.title} width="100%"/>
+                        <div className="project-image-box">
+                            <img src={imgSrc} className="zoom" alt={p.title}/>
+                        </div>
                         <h2>{p.title}</h2>
                     </a>
                     <p>{p.description}</p>

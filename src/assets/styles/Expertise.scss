@@ -13,10 +13,13 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 50px;
+    align-items: stretch;
 }
   
 .skills-container .skills-grid .skill {
-    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     text-align: left;
 }
   
