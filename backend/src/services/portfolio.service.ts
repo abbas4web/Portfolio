@@ -56,6 +56,7 @@ export class PortfolioService {
   static async getPublicProfile() {
     return prisma.siteProfile.findFirst({
       where: { isPublished: true },
+      orderBy: { updatedAt: 'desc' },
       include: {
         socialLinks: { where: { published: true }, orderBy: { displayOrder: 'asc' } },
         aboutHighlights: { where: { published: true }, orderBy: { displayOrder: 'asc' } },
@@ -65,6 +66,7 @@ export class PortfolioService {
 
   static async getAdminProfile() {
     return prisma.siteProfile.findFirst({
+      orderBy: { updatedAt: 'desc' },
       include: {
         socialLinks: { orderBy: { displayOrder: 'asc' } },
         aboutHighlights: { orderBy: { displayOrder: 'asc' } },
@@ -73,19 +75,40 @@ export class PortfolioService {
   }
 
   static async updateProfile(data: any) {
-    const existing = await prisma.siteProfile.findFirst();
-    if (existing) {
-      return prisma.siteProfile.update({
-        where: { id: existing.id },
+    const profiles = await prisma.siteProfile.findMany({
+      orderBy: { updatedAt: 'desc' },
+    });
+
+    if (profiles.length > 0) {
+      // 1. Update ALL rows in site_profiles so every row in PostgreSQL is synced
+      await prisma.siteProfile.updateMany({
         data,
       });
+
+      // 2. If there are duplicate rows, clean them up safely
+      if (profiles.length > 1) {
+        try {
+          const [primary, ...duplicates] = profiles;
+          await prisma.siteProfile.deleteMany({
+            where: { id: { in: duplicates.map((d) => d.id) } },
+          });
+        } catch (e) {
+          console.warn('[updateProfile] Duplicate cleanup skipped:', e);
+        }
+      }
+
+      return prisma.siteProfile.findFirst({
+        orderBy: { updatedAt: 'desc' },
+      });
     }
+
     return prisma.siteProfile.create({ data });
   }
 
   static async getPublicAbout() {
     const profile = await prisma.siteProfile.findFirst({
       where: { isPublished: true },
+      orderBy: { updatedAt: 'desc' },
       select: {
         fullName: true,
         title: true,

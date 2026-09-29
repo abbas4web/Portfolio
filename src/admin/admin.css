@@ -1,61 +1,159 @@
-/* Admin Portal Isolation Styles - prevents global index.scss text color conflicts */
-.admin-scope {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+/* ==========================================================================
+   Admin Portal Comprehensive Dark Styling
+   Fixes dark/invisible text across all pages, forms, inputs, modals, and dialogs.
+   ========================================================================== */
 
-  /* Form inputs styling */
-  .MuiInputBase-input {
-    color: #f1f5f9 !important;
-    -webkit-text-fill-color: #f1f5f9 !important;
-    font-size: 0.95rem !important;
-  }
+/* 1. Global MUI Inputs & Form Controls (Includes Dialogs, Modals & Portals) */
+.admin-scope .MuiInputBase-input,
+.MuiDialog-root .MuiInputBase-input,
+.MuiModal-root .MuiInputBase-input,
+.MuiPopover-root .MuiInputBase-input,
+.MuiMenu-root .MuiInputBase-input,
+.admin-scope input,
+.MuiDialog-root input,
+.admin-scope textarea,
+.MuiDialog-root textarea {
+  color: #f8fafc !important;
+  -webkit-text-fill-color: #f8fafc !important;
+  font-size: 0.95rem !important;
+  caret-color: #a78bfa !important;
+}
 
-  .MuiInputLabel-root {
-    color: #94a3b8 !important;
-    font-size: 0.9rem !important;
-    &.Mui-focused {
-      color: #8b5cf6 !important;
-    }
-  }
+/* Placeholders */
+.admin-scope input::placeholder,
+.MuiDialog-root input::placeholder,
+.admin-scope textarea::placeholder,
+.MuiDialog-root textarea::placeholder {
+  color: #64748b !important;
+  -webkit-text-fill-color: #64748b !important;
+  opacity: 1 !important;
+}
 
-  .MuiOutlinedInput-root {
-    background-color: #0f172a !important;
-    border-radius: 8px !important;
-    transition: all 0.2s ease-in-out !important;
+/* Input Labels */
+.admin-scope .MuiInputLabel-root,
+.MuiDialog-root .MuiInputLabel-root,
+.MuiModal-root .MuiInputLabel-root {
+  color: #94a3b8 !important;
+  font-size: 0.9rem !important;
+}
 
-    fieldset {
-      border-color: #334155 !important;
-    }
+.admin-scope .MuiInputLabel-root.Mui-focused,
+.MuiDialog-root .MuiInputLabel-root.Mui-focused,
+.MuiModal-root .MuiInputLabel-root.Mui-focused {
+  color: #a78bfa !important;
+}
 
-    &:hover fieldset {
-      border-color: #64748b !important;
-    }
+/* Outlined Input Container */
+.admin-scope .MuiOutlinedInput-root,
+.MuiDialog-root .MuiOutlinedInput-root,
+.MuiModal-root .MuiOutlinedInput-root {
+  background-color: #0f172a !important;
+  border-radius: 8px !important;
+  color: #f8fafc !important;
+  transition: all 0.2s ease-in-out !important;
+}
 
-    &.Mui-focused fieldset {
-      border-color: #8b5cf6 !important;
-      border-width: 2px !important;
-    }
-  }
+.admin-scope .MuiOutlinedInput-root fieldset,
+.MuiDialog-root .MuiOutlinedInput-root fieldset,
+.MuiModal-root .MuiOutlinedInput-root fieldset {
+  border-color: #334155 !important;
+}
 
-  /* Cards styling */
-  .MuiCard-root {
-    background-color: #1e293b !important;
-    border: 1px solid #334155 !important;
-    border-radius: 12px !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.2) !important;
-  }
+.admin-scope .MuiOutlinedInput-root:hover fieldset,
+.MuiDialog-root .MuiOutlinedInput-root:hover fieldset,
+.MuiModal-root .MuiOutlinedInput-root:hover fieldset {
+  border-color: #64748b !important;
+}
 
-  /* Table styling */
-  .MuiTableCell-root {
-    border-bottom: 1px solid #334155 !important;
-    color: #cbd5e1 !important;
-  }
+.admin-scope .MuiOutlinedInput-root.Mui-focused fieldset,
+.MuiDialog-root .MuiOutlinedInput-root.Mui-focused fieldset,
+.MuiModal-root .MuiOutlinedInput-root.Mui-focused fieldset {
+  border-color: #8b5cf6 !important;
+  border-width: 2px !important;
+}
 
-  .MuiTableHead-root .MuiTableCell-root {
-    background-color: #0f172a !important;
-    color: #94a3b8 !important;
-    font-weight: 600 !important;
-    text-transform: uppercase !important;
-    font-size: 0.75rem !important;
-    letter-spacing: 0.05em !important;
-  }
+/* Helper text */
+.admin-scope .MuiFormHelperText-root,
+.MuiDialog-root .MuiFormHelperText-root {
+  color: #94a3b8 !important;
+}
+
+/* 2. Dialogs & Modals Surface */
+.MuiDialog-paper {
+  background-color: #131823 !important;
+  color: #f8fafc !important;
+  border: 1px solid #1f293d !important;
+  border-radius: 12px !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7) !important;
+}
+
+.MuiDialogTitle-root {
+  color: #f8fafc !important;
+  font-weight: 700 !important;
+  border-bottom: 1px solid #1f293d !important;
+  padding-bottom: 12px !important;
+}
+
+.MuiDialogContent-root {
+  color: #cbd5e1 !important;
+  padding-top: 20px !important;
+}
+
+.MuiDialogActions-root {
+  border-top: 1px solid #1f293d !important;
+  padding: 16px !important;
+}
+
+/* 3. Checkboxes, Switches, & Labels */
+.admin-scope .MuiFormControlLabel-label,
+.MuiDialog-root .MuiFormControlLabel-label,
+.MuiModal-root .MuiFormControlLabel-label {
+  color: #f1f5f9 !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+}
+
+.admin-scope .MuiTypography-root,
+.MuiDialog-root .MuiTypography-root {
+  color: inherit;
+}
+
+/* 4. Dropdowns & Menus */
+.MuiMenu-paper,
+.MuiPopover-paper {
+  background-color: #131823 !important;
+  color: #f8fafc !important;
+  border: 1px solid #1f293d !important;
+}
+
+.MuiMenuItem-root {
+  color: #cbd5e1 !important;
+}
+
+.MuiMenuItem-root:hover,
+.MuiMenuItem-root.Mui-selected {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+}
+
+/* 5. Cards & Tables */
+.admin-scope .MuiCard-root {
+  background-color: #131823 !important;
+  border: 1px solid #1f293d !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3) !important;
+}
+
+.admin-scope .MuiTableCell-root {
+  border-bottom: 1px solid #1f293d !important;
+  color: #cbd5e1 !important;
+}
+
+.admin-scope .MuiTableHead-root .MuiTableCell-root {
+  background-color: #0f1420 !important;
+  color: #94a3b8 !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.05em !important;
 }

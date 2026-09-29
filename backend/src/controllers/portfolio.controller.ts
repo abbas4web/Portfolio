@@ -64,9 +64,12 @@ export class PortfolioController {
   static async updateProfile(req: Request, res: Response) {
     try {
       const validated = UpdateProfileSchema.parse(req.body);
+      console.log('[PortfolioController] Updating profile in database. avatarUrl:', validated.avatarUrl);
       const updated = await PortfolioService.updateProfile(validated);
+      console.log('[PortfolioController] Database updated successfully. Current avatarUrl:', updated?.avatarUrl);
       res.json({ success: true, data: updated });
     } catch (error: any) {
+      console.error('[PortfolioController] Profile update error:', error);
       PortfolioController.handleError(res, error, 'Failed to update profile');
     }
   }

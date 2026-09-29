@@ -27,12 +27,41 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve local uploads folder (ensure directory exists and matches media.service.ts)
-const uploadsDirectory = path.resolve(__dirname, '../../uploads');
-if (!require('fs').existsSync(uploadsDirectory)) {
-  require('fs').mkdirSync(uploadsDirectory, { recursive: true });
+// Serve local uploads folder (supporting both backend/uploads and root/uploads)
+const fs = require('fs');
+const backendUploads = path.resolve(__dirname, '../uploads');
+const rootUploads = path.resolve(__dirname, '../../uploads');
+
+[backendUploads, rootUploads].forEach((dir) => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+});
+
+// Sync existing files from backend/uploads to root/uploads and vice-versa
+try {
+  if (fs.existsSync(backendUploads)) {
+    const files = fs.readdirSync(backendUploads);
+    for (const f of files) {
+      const src = path.join(backendUploads, f);
+      const dst = path.join(rootUploads, f);
+      if (fs.statSync(src).isFile() && !fs.existsSync(dst)) {
+        fs.copyFileSync(src, dst);
+      }
+    }
+  }
+} catch (e) {
+  console.warn('Upload sync error:', e);
 }
-app.use('/uploads', express.static(uploadsDirectory));
+
+// Enable CORS and serve static uploads
+app.use('/uploads', (req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  next();
+});
+app.use('/uploads', express.static(backendUploads));
+app.use('/uploads', express.static(rootUploads));
 
 // Mount Auth, Public, & Admin API
 app.use('/api/auth', authRoutes);

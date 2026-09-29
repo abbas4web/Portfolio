@@ -12,19 +12,19 @@ export const LoginSchema = z.object({
 // 2. PROFILE & ABOUT
 // ==========================================
 export const UpdateProfileSchema = z.object({
-  fullName: z.string().min(2).max(100),
-  title: z.string().min(2).max(100),
+  fullName: z.string().min(1).max(100).optional(),
+  title: z.string().min(1).max(100).optional(),
   headline: z.string().optional().nullable(),
   shortBio: z.string().optional().nullable(),
   fullBio: z.string().optional().nullable(),
-  email: z.string().email(),
+  email: z.string().email().optional().nullable().or(z.literal('')),
   phone: z.string().optional().nullable(),
   location: z.string().optional().nullable(),
   avatarUrl: z.string().optional().nullable().or(z.literal('')),
   avatarAlt: z.string().optional().nullable(),
   metaTitle: z.string().optional().nullable(),
   metaDescription: z.string().optional().nullable(),
-  isPublished: z.boolean().default(true),
+  isPublished: z.boolean().optional(),
 });
 
 export const AboutHighlightSchema = z.object({

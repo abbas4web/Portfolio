@@ -61,20 +61,24 @@ export class CloudMediaService {
       });
     }
 
-    // Fallback: Store locally in backend/uploads directory if cloud keys are not configured yet
-    const uploadsDir = path.resolve(__dirname, '../../uploads');
-    if (!fs.existsSync(uploadsDir)) {
-      fs.mkdirSync(uploadsDir, { recursive: true });
-    }
+    // Fallback: Store locally in uploads directory if cloud keys are not configured yet
+    const backendUploads = path.resolve(__dirname, '../../uploads');
+    const rootUploads = path.resolve(__dirname, '../../../uploads');
+    [backendUploads, rootUploads].forEach((dir) => {
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+    });
 
     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
     const ext = path.extname(originalName) || '.png';
     const rawBase = path.basename(originalName, ext);
     const sanitizedBase = rawBase.replace(/[^a-zA-Z0-9_-]/g, '_') || 'image';
     const cleanFilename = `${sanitizedBase}-${uniqueSuffix}${ext}`;
-    const filePath = path.join(uploadsDir, cleanFilename);
 
-    fs.writeFileSync(filePath, buffer);
+    // Write to both paths to ensure Express static resolution never misses
+    fs.writeFileSync(path.join(backendUploads, cleanFilename), buffer);
+    fs.writeFileSync(path.join(rootUploads, cleanFilename), buffer);
 
     const fallbackUrl = `http://localhost:${config.port}/uploads/${cleanFilename}`;
     return {
@@ -99,11 +103,19 @@ export class CloudMediaService {
       return res.result === 'ok';
     }
 
-    const localPath = path.resolve(__dirname, '../../uploads', publicId);
-    if (fs.existsSync(localPath)) {
-      fs.unlinkSync(localPath);
-      return true;
+    const paths = [
+      path.resolve(__dirname, '../../uploads', publicId),
+      path.resolve(__dirname, '../../../uploads', publicId),
+    ];
+    let deleted = false;
+    for (const p of paths) {
+      if (fs.existsSync(p)) {
+        try {
+          fs.unlinkSync(p);
+          deleted = true;
+        } catch (_) {}
+      }
     }
-    return false;
+    return deleted;
   }
 }

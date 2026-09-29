@@ -56,7 +56,7 @@ export default function ProfileManager({ profile, onRefresh }: ProfileManagerPro
     setAvatarUrl(uploadedUrl);
     setLoading(true);
     try {
-      await api.updateProfile({
+      const payload = {
         fullName: fullName || profile?.fullName || 'Shaikh Abbas',
         title: title || profile?.title || 'Senior Software Engineer',
         headline: headline || profile?.headline || '',
@@ -67,11 +67,14 @@ export default function ProfileManager({ profile, onRefresh }: ProfileManagerPro
         shortBio: shortBio || profile?.shortBio || '',
         metaDescription: metaDescription || profile?.metaDescription || '',
         isPublished: true,
-      });
+      };
+      const res = await api.updateProfile(payload);
+      console.log('[ProfileManager] Profile updated successfully in database:', res);
       setFeedback({ message: 'Avatar image replaced and saved to database successfully!', severity: 'success' });
       onRefresh();
     } catch (err: any) {
-      setFeedback({ message: 'Uploaded, but failed to save profile: ' + (err.message || ''), severity: 'error' });
+      console.error('[ProfileManager] Failed to update profile:', err);
+      setFeedback({ message: 'Failed to save to database: ' + (err.message || ''), severity: 'error' });
     } finally {
       setLoading(false);
     }
@@ -178,19 +181,21 @@ export default function ProfileManager({ profile, onRefresh }: ProfileManagerPro
                     helperText="Upload an image above or enter an image URL and click Save"
                   />
                   <Button
-                    variant="outlined"
+                    variant="contained"
                     disabled={loading}
+                    startIcon={loading ? <CircularProgress size={14} sx={{ color: '#fff' }} /> : null}
                     onClick={() => handleAvatarUploaded(avatarUrl)}
                     sx={{
                       height: 40,
-                      color: '#a78bfa',
-                      borderColor: '#7c3aed',
+                      bgcolor: '#7c3aed',
+                      color: '#fff',
                       textTransform: 'none',
                       whiteSpace: 'nowrap',
-                      '&:hover': { borderColor: '#a78bfa', bgcolor: 'rgba(124, 58, 237, 0.1)' },
+                      fontWeight: 600,
+                      '&:hover': { bgcolor: '#6d28d9' },
                     }}
                   >
-                    Save Avatar
+                    {loading ? 'Saving...' : 'Save Avatar'}
                   </Button>
                 </Box>
               </Grid>

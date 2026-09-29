@@ -41,7 +41,99 @@ import ExperienceManager from './ExperienceManager';
 import EducationManager from './EducationManager';
 import NavigationManager from './NavigationManager';
 import ServicesManager from './ServicesManager';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import './admin.css';
+
+const adminDarkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    background: {
+      default: '#0a0d14',
+      paper: '#131823',
+    },
+    text: {
+      primary: '#f8fafc',
+      secondary: '#94a3b8',
+    },
+    primary: {
+      main: '#7c3aed',
+    },
+  },
+  components: {
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          color: '#f8fafc',
+        },
+        input: {
+          color: '#f8fafc !important',
+          WebkitTextFillColor: '#f8fafc !important',
+        },
+      },
+    },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: '#94a3b8 !important',
+          '&.Mui-focused': {
+            color: '#a78bfa !important',
+          },
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#0f172a',
+          '& fieldset': {
+            borderColor: '#334155',
+          },
+          '&:hover fieldset': {
+            borderColor: '#64748b',
+          },
+          '&.Mui-focused fieldset': {
+            borderColor: '#8b5cf6',
+          },
+        },
+        input: {
+          color: '#f8fafc !important',
+          WebkitTextFillColor: '#f8fafc !important',
+        },
+      },
+    },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: '#131823 !important',
+          color: '#f8fafc !important',
+          border: '1px solid #1f293d',
+        },
+      },
+    },
+    MuiDialogTitle: {
+      styleOverrides: {
+        root: {
+          color: '#f8fafc !important',
+          fontWeight: 700,
+        },
+      },
+    },
+    MuiDialogContent: {
+      styleOverrides: {
+        root: {
+          color: '#cbd5e1 !important',
+        },
+      },
+    },
+    MuiFormControlLabel: {
+      styleOverrides: {
+        label: {
+          color: '#f1f5f9 !important',
+        },
+      },
+    },
+  },
+});
 
 const drawerWidth = 260;
 
@@ -128,7 +220,11 @@ export default function AdminPortal() {
   }
 
   if (!currentUser) {
-    return <AdminLogin onLoginSuccess={(user) => { setCurrentUser(user); loadAllData(); }} />;
+    return (
+      <ThemeProvider theme={adminDarkTheme}>
+        <AdminLogin onLoginSuccess={(user) => { setCurrentUser(user); loadAllData(); }} />
+      </ThemeProvider>
+    );
   }
 
   const menuItems = [
@@ -217,7 +313,8 @@ export default function AdminPortal() {
   );
 
   return (
-    <Box className="admin-scope" sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#0b0f19' }}>
+    <ThemeProvider theme={adminDarkTheme}>
+      <Box className="admin-scope" sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#0b0f19' }}>
       {/* Top Navbar */}
       <AppBar
         position="fixed"
@@ -355,5 +452,6 @@ export default function AdminPortal() {
         )}
       </Box>
     </Box>
+    </ThemeProvider>
   );
 }
