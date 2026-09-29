@@ -1,42 +1,51 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import dotenv from 'dotenv';
 import path from 'path';
-
-dotenv.config();
+import { config } from './config';
 
 import publicRoutes from './routes/public';
 import adminRoutes from './routes/admin';
 
 const app = express();
-const PORT = process.env.PORT || 5000;
-const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:3000';
 
 app.use(helmet());
 app.use(
   cors({
-    origin: CORS_ORIGIN,
+    origin: config.corsOrigin,
     credentials: true,
   })
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve uploads statically
+// Serve local uploads
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-// Mount routes
-app.use('/api/v1', publicRoutes);
-app.use('/api/v1/admin', adminRoutes);
+// Mount Public & Admin API
+app.use('/api', publicRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Health check
 app.get('/health', (_req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+  res.json({ success: true, status: 'healthy', timestamp: new Date().toISOString() });
 });
 
-app.listen(PORT, () => {
-  console.log(`Portfolio Backend running on http://localhost:${PORT}`);
+// Centralized 404 handler
+app.use((_req, res) => {
+  res.status(404).json({ success: false, error: 'Endpoint not found' });
 });
+
+// Centralized error handler
+app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error('Unhandled Server Error:', err);
+  res.status(500).json({ success: false, error: 'Internal server error' });
+});
+
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(config.port, () => {
+    console.log(`Portfolio REST API running on http://localhost:${config.port}`);
+  });
+}
 
 export default app;
