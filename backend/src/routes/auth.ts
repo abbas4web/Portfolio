@@ -28,12 +28,12 @@ router.post('/login', loginLimiter, async (req: Request, res: Response) => {
     const { email, password } = LoginSchema.parse(req.body);
     const result = await PortfolioService.login(email, password);
 
-    // Set secure HTTP-only cookie
+    // Set secure HTTP-only cookie (sameSite: 'none' in production allows cross-origin Vercel to Railway requests)
     res.cookie(config.cookieName, result.accessToken, {
       httpOnly: true,
-      secure: config.isProduction, // false in dev so http://localhost works
-      sameSite: config.isProduction ? 'strict' : 'lax',
-      maxAge: 15 * 60 * 1000, // 15 minutes
+      secure: config.isProduction,
+      sameSite: config.isProduction ? 'none' : 'lax',
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
       path: '/',
     });
 
@@ -61,7 +61,7 @@ router.post('/logout', (req: Request, res: Response) => {
   res.clearCookie(config.cookieName, {
     httpOnly: true,
     secure: config.isProduction,
-    sameSite: config.isProduction ? 'strict' : 'lax',
+    sameSite: config.isProduction ? 'none' : 'lax',
     path: '/',
   });
 
