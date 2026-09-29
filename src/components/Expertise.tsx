@@ -1,44 +1,43 @@
 import React from "react";
-import '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faReact, faDocker, faPython } from '@fortawesome/free-brands-svg-icons';
+import { faReact, faPython } from '@fortawesome/free-brands-svg-icons';
+import { faBrain } from '@fortawesome/free-solid-svg-icons';
 import Chip from '@mui/material/Chip';
 import '../assets/styles/Expertise.scss';
 
 const labelsFirst = [
-    "React",
-    "TypeScript",
-    "JavaScript",
-    "HTML5",
-    "CSS3",
-    "SASS",
-    "Flask",
-    "Python",
-    "SQL",
-    "PostgreSQL",
-    "Postman"
+    "Agentic AI",
+    "Prompt Engineering",
+    "LLM Integration",
+    "Google Gemini",
+    "OpenAI API",
+    "AI Workflow Automation",
+    "Multi-Agent Systems",
+    "Autonomous Agents"
 ];
 
 const labelsSecond = [
-    "Git",
-    "GitHub Actions",
-    "Docker",
-    "AWS",
-    "Azure",
-    "Linux",
-    "Snowflake",
-    "Pandas",
-    "Selenium",
+    "React.js",
+    "React Native",
+    "Next.js",
+    "Angular",
+    "JavaScript (ES6+)",
+    "TypeScript",
+    "Redux Toolkit",
+    "Redux Saga",
+    "Flutter",
+    "HTML5 / CSS3 / SASS"
 ];
 
 const labelsThird = [
-    "OpenAI",
-    "Groq",
-    "LangChain",
-    "Qdrant",
-    "Hugging Face",
-    "LlamaIndex",
-    "Streamlit",
+    "Node.js",
+    "Express.js",
+    "PostgreSQL",
+    "MongoDB",
+    "REST API",
+    "Axios",
+    "Git / GitHub",
+    "Postman"
 ];
 
 function Expertise() {
@@ -48,37 +47,37 @@ function Expertise() {
             <h1>Expertise</h1>
             <div className="skills-grid">
                 <div className="skill">
-                    <FontAwesomeIcon icon={faReact} size="3x"/>
-                    <h3>Full Stack Web Development</h3>
-                    <p>I have built a diverse array of web applications from scratch using modern technologies such as React and Flask. I have a strong proficiency in the SDLC process and frontend + backend development.</p>
+                    <FontAwesomeIcon icon={faBrain} size="3x"/>
+                    <h3>Agentic AI & LLMs</h3>
+                    <p>Specialized in architecting multi-agent AI systems, prompt engineering, and integrating LLMs (Google Gemini, OpenAI) to build autonomous workflows, task automation, and intelligent assistants.</p>
                     <div className="flex-chips">
                         <span className="chip-title">Tech stack:</span>
                         {labelsFirst.map((label, index) => (
-                            <Chip key={index} className='chip' label={label} />
+                            <Chip key={label} className='chip' label={label} />
                         ))}
                     </div>
                 </div>
 
                 <div className="skill">
-                    <FontAwesomeIcon icon={faDocker} size="3x"/>
-                    <h3>DevOps & Automation</h3>
-                    <p>Once the application is built, I help clients set up DevOps testing, CI/CD pipelines, and deployment automation to support the successful Go-Live.</p>
+                    <FontAwesomeIcon icon={faReact} size="3x"/>
+                    <h3>Frontend & Mobile Development</h3>
+                    <p>Skilled in architecting reusable, modular UI component libraries and cross-platform apps using React.js, Next.js, and React Native. Experienced in predictable state management with Redux Toolkit and Redux Saga.</p>
                     <div className="flex-chips">
                         <span className="chip-title">Tech stack:</span>
                         {labelsSecond.map((label, index) => (
-                            <Chip key={index} className='chip' label={label} />
+                            <Chip key={label} className='chip' label={label} />
                         ))}
                     </div>
                 </div>
 
                 <div className="skill">
                     <FontAwesomeIcon icon={faPython} size="3x"/>
-                    <h3>GenAI & LLM</h3>
-                    <p>Stay relevant in the market by leveraging the latest AI models in your projects. I have professional experience building enterprise grade GenAI-enabled solutions to empower intelligent decision making.</p>
+                    <h3>Backend & API Architecture</h3>
+                    <p>Experienced in building and optimizing backend services, RESTful APIs, and managing relational and NoSQL databases like PostgreSQL and MongoDB, with robust data flows between AI services and frontends.</p>
                     <div className="flex-chips">
                         <span className="chip-title">Tech stack:</span>
                         {labelsThird.map((label, index) => (
-                            <Chip key={index} className='chip' label={label} />
+                            <Chip key={label} className='chip' label={label} />
                         ))}
                     </div>
                 </div>
