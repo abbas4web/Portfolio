@@ -1,14 +1,11 @@
 import { Router } from 'express';
 import { PortfolioController } from '../controllers/portfolio.controller';
-import { authenticateJwt } from '../middleware/auth';
+import { authenticateAdmin } from '../middleware/auth';
 
 const router = Router();
 
-// ================= AUTH =================
-router.post('/auth/login', PortfolioController.login);
-
-// All routes below require Admin JWT
-router.use(authenticateJwt as any);
+// Protect ALL admin routes with authenticateAdmin
+router.use(authenticateAdmin as any);
 
 router.get('/auth/me', PortfolioController.getMe as any);
 

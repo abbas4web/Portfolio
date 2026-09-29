@@ -2,8 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import path from 'path';
+import cookieParser from 'cookie-parser';
 import { config } from './config';
 
+import authRoutes from './routes/auth';
 import publicRoutes from './routes/public';
 import adminRoutes from './routes/admin';
 
@@ -13,16 +15,18 @@ app.use(helmet());
 app.use(
   cors({
     origin: config.corsOrigin,
-    credentials: true,
+    credentials: true, // Allow cookies across origins
   })
 );
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve local uploads
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-// Mount Public & Admin API
+// Mount Auth, Public, & Admin API
+app.use('/api/auth', authRoutes);
 app.use('/api', publicRoutes);
 app.use('/api/admin', adminRoutes);
 
