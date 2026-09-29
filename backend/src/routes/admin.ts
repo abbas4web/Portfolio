@@ -60,8 +60,10 @@ router.patch('/contact/messages/:id', PortfolioController.updateMessageStatus);
 router.delete('/contact/messages/:id', PortfolioController.deleteMessage);
 
 // ================= MEDIA =================
+import { uploadMiddleware } from '../middleware/upload';
+
 router.get('/media', PortfolioController.getMedia);
-router.post('/media', PortfolioController.recordMedia as any);
+router.post('/media/upload', uploadMiddleware.single('file'), PortfolioController.uploadMedia as any);
 router.delete('/media/:id', PortfolioController.deleteMedia);
 
 export default router;

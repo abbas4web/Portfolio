@@ -17,6 +17,7 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import ContactMailOutlinedIcon from '@mui/icons-material/ContactMailOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { api } from './api';
+import MediaUploader from './MediaUploader';
 
 interface ProfileManagerProps {
   profile: any;
@@ -134,13 +135,11 @@ export default function ProfileManager({ profile, onRefresh }: ProfileManagerPro
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Avatar Image URL"
-                  placeholder="https://..."
-                  value={avatarUrl}
-                  onChange={(e) => setAvatarUrl(e.target.value)}
-                  helperText="Direct image link for your hero profile avatar"
+                <MediaUploader
+                  currentUrl={avatarUrl}
+                  onUploaded={(uploadedUrl) => setAvatarUrl(uploadedUrl)}
+                  label="Profile Avatar Photo"
+                  previewHeight={140}
                 />
               </Grid>
             </Grid>

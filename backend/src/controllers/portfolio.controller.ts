@@ -475,22 +475,38 @@ export class PortfolioController {
     }
   }
 
-  static async recordMedia(req: AuthenticatedRequest, res: Response) {
+  static async uploadMedia(req: AuthenticatedRequest, res: Response) {
     try {
-      const { filename, originalName, mimeType, sizeBytes, url, path, altText } = req.body;
+      if (!req.file) {
+        return res.status(400).json({ success: false, error: 'No image file uploaded' });
+      }
+
+      const { CloudMediaService } = await import('../services/media.service');
+      const uploadResult = await CloudMediaService.uploadImage(
+        req.file.buffer,
+        req.file.originalname,
+        req.file.mimetype,
+        'portfolio'
+      );
+
       const recorded = await PortfolioService.recordMediaUpload({
-        filename,
-        originalName,
-        mimeType,
-        sizeBytes,
-        url,
-        path,
-        altText,
+        filename: uploadResult.publicId,
+        originalName: uploadResult.filename,
+        mimeType: uploadResult.mimeType,
+        sizeBytes: uploadResult.sizeBytes,
+        url: uploadResult.url,
+        path: uploadResult.publicId,
+        altText: req.body.altText || req.file.originalname,
         uploadedById: req.user?.userId,
       });
-      res.status(201).json({ success: true, data: recorded });
+
+      res.status(201).json({
+        success: true,
+        message: 'Image uploaded successfully',
+        data: recorded,
+      });
     } catch (error: any) {
-      PortfolioController.handleError(res, error, 'Failed to save media metadata');
+      PortfolioController.handleError(res, error, 'Image upload failed');
     }
   }
 

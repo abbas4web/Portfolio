@@ -25,6 +25,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LaunchIcon from '@mui/icons-material/Launch';
 import { api } from './api';
+import MediaUploader from './MediaUploader';
 
 interface ProjectsManagerProps {
   projects: any[];
@@ -295,7 +296,7 @@ export default function ProjectsManager({ projects, onRefresh }: ProjectsManager
             />
 
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
                   fullWidth
                   label="Technologies (comma separated)"
@@ -304,13 +305,11 @@ export default function ProjectsManager({ projects, onRefresh }: ProjectsManager
                   placeholder="React.js, Node.js, PostgreSQL"
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Image URL or Path"
-                  value={image}
-                  onChange={(e) => setImage(e.target.value)}
-                  placeholder="/mock01.png"
+              <Grid item xs={12}>
+                <MediaUploader
+                  currentUrl={image}
+                  onUploaded={(uploadedUrl) => setImage(uploadedUrl)}
+                  label="Project Thumbnail Image"
                 />
               </Grid>
             </Grid>

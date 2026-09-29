@@ -93,5 +93,20 @@ export const api = {
 
   // Media
   getMedia: () => apiRequest('/admin/media'),
+  uploadMedia: async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const url = `${API_BASE}/admin/media/upload`;
+    const res = await fetch(url, {
+      method: 'POST',
+      body: formData,
+      credentials: 'include',
+    });
+    const data = await res.json().catch(() => null);
+    if (!res.ok) {
+      throw new Error(data?.error || 'Upload failed');
+    }
+    return data;
+  },
   deleteMedia: (id: string) => apiRequest(`/admin/media/${id}`, { method: 'DELETE' }),
 };

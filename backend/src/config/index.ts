@@ -13,4 +13,10 @@ export const config = {
   uploadDir: process.env.UPLOAD_DIR || './uploads',
   cookieName: 'admin_session',
   isProduction: process.env.NODE_ENV === 'production',
+  cloudinary: {
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME || '',
+    apiKey: process.env.CLOUDINARY_API_KEY || '',
+    apiSecret: process.env.CLOUDINARY_API_SECRET || '',
+    url: process.env.CLOUDINARY_URL || '',
+  },
 };
