@@ -337,26 +337,26 @@ export class PortfolioService {
 
   // ===================== AI LAB =====================
   static async getPublicAILab() {
-    return prisma.aiLabExperiment.findMany({
+    return prisma.aILabExperiment.findMany({
       where: { published: true },
       orderBy: { displayOrder: 'asc' },
     });
   }
 
   static async getAllAILab() {
-    return prisma.aiLabExperiment.findMany({ orderBy: { displayOrder: 'asc' } });
+    return prisma.aILabExperiment.findMany({ orderBy: { displayOrder: 'asc' } });
   }
 
   static async createAILab(data: any) {
-    return prisma.aiLabExperiment.create({ data });
+    return prisma.aILabExperiment.create({ data });
   }
 
   static async updateAILab(id: string, data: any) {
-    return prisma.aiLabExperiment.update({ where: { id }, data });
+    return prisma.aILabExperiment.update({ where: { id }, data });
   }
 
   static async deleteAILab(id: string) {
-    return prisma.aiLabExperiment.delete({ where: { id } });
+    return prisma.aILabExperiment.delete({ where: { id } });
   }
 
   // ===================== SOCIAL LINKS =====================
