@@ -5,9 +5,9 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "prisma generate && tsc",
+    "build": "node node_modules/prisma/build/index.js generate",
     "start": "node dist/index.js",
-    "prisma:generate": "prisma generate",
+    "prisma:generate": "node node_modules/prisma/build/index.js generate",
     "prisma:migrate": "prisma migrate deploy",
     "prisma:studio": "prisma studio",
     "seed": "tsx prisma/seed.ts"
@@ -24,6 +24,7 @@
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
+    "prisma": "^5.14.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -34,7 +35,6 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/multer": "^1.4.11",
     "@types/node": "^20.12.12",
-    "prisma": "^5.14.0",
     "tsx": "^4.10.5",
     "typescript": "^5.4.5"
   }
