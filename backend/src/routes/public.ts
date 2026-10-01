@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { PortfolioController } from '../controllers/portfolio.controller';
+import { PortfolioService } from '../services/portfolio.service';
 import rateLimit from 'express-rate-limit';
 
 const router = Router();
@@ -13,12 +14,35 @@ const contactLimiter = rateLimit({
 // Aggregate bootstrap endpoint for instant SPA hydration
 router.get('/bootstrap', async (_req, res) => {
   try {
-    const [profile, navigation, services, skills, experience, education, projects, socialLinks] =
+    const [profile, about, navigation, skills, experience, education, projects, services, socialLinks] =
       await Promise.all([
-        PortfolioController.getProfile as any,
+        PortfolioService.getPublicProfile(),
+        PortfolioService.getPublicAbout(),
+        PortfolioService.getPublicNavigation(),
+        PortfolioService.getPublicSkills(),
+        PortfolioService.getPublicExperience(),
+        PortfolioService.getPublicEducation(),
+        PortfolioService.getPublicProjects(),
+        PortfolioService.getPublicServices(),
+        PortfolioService.getPublicSocialLinks(),
       ]);
-    // Uses individual public controllers
-  } catch (e) {}
+    res.json({
+      success: true,
+      data: {
+        profile,
+        about,
+        navigation,
+        skills,
+        experience,
+        education,
+        projects,
+        services,
+        socialLinks,
+      },
+    });
+  } catch (e: any) {
+    res.status(500).json({ success: false, error: e.message || 'Failed to fetch bootstrap data' });
+  }
 });
 
 // Public Read-Only Endpoints (Only published / visible content)
