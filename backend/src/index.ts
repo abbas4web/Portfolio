@@ -17,26 +17,27 @@ app.use(
     crossOriginResourcePolicy: { policy: 'cross-origin' },
   })
 );
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (like Postman, mobile apps, or server-to-server)
-      if (!origin) return callback(null, true);
-      // Allow all vercel preview domains, localhost, or configured CORS_ORIGIN
-      if (
-        !config.corsOrigin ||
-        config.corsOrigin === '*' ||
-        origin === config.corsOrigin ||
-        origin.endsWith('.vercel.app') ||
-        origin.includes('localhost')
-      ) {
-        return callback(null, true);
-      }
+const corsConfig = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    // Allow requests with no origin (like Postman, mobile apps, or server-to-server)
+    if (!origin) return callback(null, true);
+    // Allow all vercel preview domains, localhost, or configured CORS_ORIGIN
+    if (
+      !config.corsOrigin ||
+      config.corsOrigin === '*' ||
+      origin === config.corsOrigin ||
+      origin.endsWith('.vercel.app') ||
+      origin.includes('localhost')
+    ) {
       return callback(null, true);
-    },
-    credentials: true, // Allow cookies across origins
-  })
-);
+    }
+    return callback(null, true);
+  },
+  credentials: true, // Allow cookies across origins
+};
+
+app.use(cors(corsConfig));
+app.options('*', cors(corsConfig));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
