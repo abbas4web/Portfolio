@@ -171,33 +171,76 @@ export default function ProfileManager({ profile, onRefresh }: ProfileManagerPro
                 />
               </Grid>
               <Grid item xs={12}>
-                <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
-                  <TextField
-                    fullWidth
-                    size="small"
-                    label="Avatar Image URL (or paste external URL)"
-                    value={avatarUrl}
-                    onChange={(e) => setAvatarUrl(e.target.value)}
-                    helperText="Upload an image above or enter an image URL and click Save"
-                  />
-                  <Button
-                    variant="contained"
-                    disabled={loading}
-                    startIcon={loading ? <CircularProgress size={14} sx={{ color: '#fff' }} /> : null}
-                    onClick={() => handleAvatarUploaded(avatarUrl)}
-                    sx={{
-                      height: 40,
-                      bgcolor: '#7c3aed',
-                      color: '#fff',
-                      textTransform: 'none',
-                      whiteSpace: 'nowrap',
-                      fontWeight: 600,
-                      '&:hover': { bgcolor: '#6d28d9' },
-                    }}
-                  >
-                    {loading ? 'Saving...' : 'Save Avatar'}
-                  </Button>
-                </Box>
+                {avatarUrl.startsWith('data:') ? (
+                  <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      label="Avatar Image"
+                      value={`📸 Embedded Image Attached (${(avatarUrl.length / 1024).toFixed(1)} KB)`}
+                      disabled
+                      helperText="Uploaded image is securely stored in database. Click 'Clear' to enter an external URL instead."
+                      InputProps={{
+                        endAdornment: (
+                          <Button
+                            size="small"
+                            color="warning"
+                            onClick={() => setAvatarUrl('')}
+                            sx={{ textTransform: 'none', fontSize: '0.75rem', minWidth: 60 }}
+                          >
+                            Clear
+                          </Button>
+                        ),
+                      }}
+                    />
+                    <Button
+                      variant="contained"
+                      disabled={loading}
+                      startIcon={loading ? <CircularProgress size={14} sx={{ color: '#fff' }} /> : null}
+                      onClick={() => handleAvatarUploaded(avatarUrl)}
+                      sx={{
+                        height: 40,
+                        bgcolor: '#7c3aed',
+                        color: '#fff',
+                        textTransform: 'none',
+                        whiteSpace: 'nowrap',
+                        fontWeight: 600,
+                        '&:hover': { bgcolor: '#6d28d9' },
+                      }}
+                    >
+                      {loading ? 'Saving...' : 'Save Avatar'}
+                    </Button>
+                  </Box>
+                ) : (
+                  <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      label="Avatar Image URL (or paste external URL)"
+                      value={avatarUrl}
+                      onChange={(e) => setAvatarUrl(e.target.value)}
+                      placeholder="https://example.com/avatar.jpg"
+                      helperText="Upload an image above or enter an image URL and click Save"
+                    />
+                    <Button
+                      variant="contained"
+                      disabled={loading}
+                      startIcon={loading ? <CircularProgress size={14} sx={{ color: '#fff' }} /> : null}
+                      onClick={() => handleAvatarUploaded(avatarUrl)}
+                      sx={{
+                        height: 40,
+                        bgcolor: '#7c3aed',
+                        color: '#fff',
+                        textTransform: 'none',
+                        whiteSpace: 'nowrap',
+                        fontWeight: 600,
+                        '&:hover': { bgcolor: '#6d28d9' },
+                      }}
+                    >
+                      {loading ? 'Saving...' : 'Save Avatar'}
+                    </Button>
+                  </Box>
+                )}
               </Grid>
             </Grid>
           </CardContent>

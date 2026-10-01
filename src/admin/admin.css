@@ -157,3 +157,13 @@
   font-size: 0.75rem !important;
   letter-spacing: 0.05em !important;
 }
+
+/* 6. Prevent Horizontal Overflow / Side-Scrolling */
+.admin-scope {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+}
+
+.admin-scope * {
+  box-sizing: border-box;
+}

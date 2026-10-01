@@ -314,7 +314,7 @@ export default function AdminPortal() {
 
   return (
     <ThemeProvider theme={adminDarkTheme}>
-      <Box className="admin-scope" sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#0b0f19' }}>
+      <Box className="admin-scope" sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#0b0f19', maxWidth: '100vw', overflowX: 'hidden' }}>
       {/* Top Navbar */}
       <AppBar
         position="fixed"
@@ -368,7 +368,7 @@ export default function AdminPortal() {
       </Box>
 
       {/* Main Content Area */}
-      <Box component="main" sx={{ flexGrow: 1, p: 3, width: { md: `calc(100% - ${drawerWidth}px)` }, mt: '64px' }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3, width: { md: `calc(100% - ${drawerWidth}px)` }, mt: '64px', minWidth: 0, maxWidth: '100%', overflowX: 'hidden' }}>
         {loading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
             <CircularProgress sx={{ color: '#5000ca' }} />
