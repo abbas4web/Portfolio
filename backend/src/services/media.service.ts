@@ -61,13 +61,29 @@ export class CloudMediaService {
       });
     }
 
-    // Fallback: Store locally in uploads directory if cloud keys are not configured yet
+    // Fallback: If on Vercel or cloud storage not configured, return base64 Data URI
+    const isVercel = Boolean(process.env.VERCEL);
+    if (isVercel) {
+      const base64 = buffer.toString('base64');
+      const dataUri = `data:${mimeType};base64,${base64}`;
+      return {
+        url: dataUri,
+        publicId: `upload-${Date.now()}`,
+        filename: originalName,
+        mimeType,
+        sizeBytes: buffer.length,
+      };
+    }
+
+    // Local development disk storage
     const backendUploads = path.resolve(__dirname, '../../uploads');
     const rootUploads = path.resolve(__dirname, '../../../uploads');
     [backendUploads, rootUploads].forEach((dir) => {
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-      }
+      try {
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir, { recursive: true });
+        }
+      } catch (_) {}
     });
 
     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
@@ -77,8 +93,10 @@ export class CloudMediaService {
     const cleanFilename = `${sanitizedBase}-${uniqueSuffix}${ext}`;
 
     // Write to both paths to ensure Express static resolution never misses
-    fs.writeFileSync(path.join(backendUploads, cleanFilename), buffer);
-    fs.writeFileSync(path.join(rootUploads, cleanFilename), buffer);
+    try {
+      fs.writeFileSync(path.join(backendUploads, cleanFilename), buffer);
+      fs.writeFileSync(path.join(rootUploads, cleanFilename), buffer);
+    } catch (_) {}
 
     const fallbackUrl = `http://localhost:${config.port}/uploads/${cleanFilename}`;
     return {
