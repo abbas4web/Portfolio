@@ -19,7 +19,21 @@ app.use(
 );
 app.use(
   cors({
-    origin: config.corsOrigin,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like Postman, mobile apps, or server-to-server)
+      if (!origin) return callback(null, true);
+      // Allow all vercel preview domains, localhost, or configured CORS_ORIGIN
+      if (
+        !config.corsOrigin ||
+        config.corsOrigin === '*' ||
+        origin === config.corsOrigin ||
+        origin.endsWith('.vercel.app') ||
+        origin.includes('localhost')
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, true);
+    },
     credentials: true, // Allow cookies across origins
   })
 );

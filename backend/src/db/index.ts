@@ -12,9 +12,8 @@ const prisma =
     log: config.nodeEnv === 'development' ? ['query', 'error', 'warn'] : ['error'],
   });
 
-if (config.nodeEnv !== 'production') {
-  global.__prisma = prisma;
-}
+// Cache prisma client globally across invocations to prevent connection leaks
+global.__prisma = prisma;
 
 export default prisma;
 export { prisma };
